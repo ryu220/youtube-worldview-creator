@@ -79,7 +79,7 @@ export class WorldViewGenerator {
   /**
    * テーマ生成
    */
-  private generateTheme(element: Element, genre: string): string {
+  private generateTheme(element: Element, _genre: string): string {
     const elementThemes: Record<Element, string[]> = {
       木: ['ナチュラル・グロース', 'フレッシュ・クリエイティブ', 'グリーン・イノベーション'],
       火: ['パッション・エナジー', 'ダイナミック・パワー', 'ファイアー・スピリット'],
@@ -173,8 +173,8 @@ export class WorldViewGenerator {
    */
   private generateToneAndManner(
     element: Element,
-    genre: string,
-    targetAge: string
+    _genre: string,
+    _targetAge: string
   ): WorldViewConcept['toneAndManner'] {
     const elementStyles: Record<Element, { visualStyle: string; mood: string; typography: string }> = {
       木: {
@@ -212,8 +212,8 @@ export class WorldViewGenerator {
    */
   private generateRecommendations(
     element: Element,
-    genre: string,
-    targetGender: string
+    _genre: string,
+    _targetGender: string
   ): WorldViewConcept['recommendations'] {
     const elementRecommendations: Record<Element, WorldViewConcept['recommendations']> = {
       木: {

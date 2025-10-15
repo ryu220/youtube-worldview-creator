@@ -6,7 +6,7 @@ import { GeminiClient } from '@/lib/gemini-client';
 // Helper function to convert Pillar to extended format for Gemini API
 function extendPillar(pillar: Pillar) {
   const stemInfo = TEN_STEMS[pillar.stem];
-  const branchInfo = TWELVE_BRANCHES[pillar.branch];
+  const _branchInfo = TWELVE_BRANCHES[pillar.branch];
 
   return {
     stem: pillar.stem,

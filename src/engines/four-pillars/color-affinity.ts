@@ -1,4 +1,4 @@
-import { Element, FIVE_ELEMENTS, GENERATING_CYCLE, CONTROLLING_CYCLE } from './constants';
+import { Element, FIVE_ELEMENTS as _FIVE_ELEMENTS, GENERATING_CYCLE, CONTROLLING_CYCLE } from './constants';
 
 export interface ColorAffinity {
   favorable: string[]; // 吉色
@@ -9,7 +9,7 @@ export interface ColorAffinity {
 /**
  * 五行から色彩傾向を算出
  */
-export function getColorAffinity(dominantElement: Element, weakElement: Element): ColorAffinity {
+export function getColorAffinity(dominantElement: Element, _weakElement: Element): ColorAffinity {
   const elementColors: Record<Element, string[]> = {
     木: ['#4CAF50', '#8BC34A', '#66BB6A', '#81C784', '#A5D6A7'], // 緑系
     火: ['#F44336', '#FF5722', '#E91E63', '#FF6F00', '#FF8A65'], // 赤系

@@ -177,6 +177,7 @@ ${request.name}さんの分析を、以下のJSON形式で回答してくださ�
 
       // 制御文字をクリーンアップ（改行、タブ、バックスペースなど）
       jsonText = jsonText
+        // eslint-disable-next-line no-control-regex
         .replace(/[\u0000-\u001F\u007F-\u009F]/g, (char) => {
           // 改行とタブは保持
           if (char === '\n' || char === '\t') {
@@ -242,7 +243,7 @@ QUALITY REQUIREMENTS:
       // 画像データを取得
       const imageData = response.candidates?.[0]?.content?.parts?.[0];
 
-      if (imageData && 'inlineData' in imageData) {
+      if (imageData && 'inlineData' in imageData && imageData.inlineData) {
         // Base64エンコードされた画像をData URLに変換
         const base64Image = imageData.inlineData.data;
         const mimeType = imageData.inlineData.mimeType || 'image/png';
@@ -285,7 +286,7 @@ QUALITY REQUIREMENTS:
       // 画像データを取得
       const imageData = response.candidates?.[0]?.content?.parts?.[0];
 
-      if (imageData && 'inlineData' in imageData) {
+      if (imageData && 'inlineData' in imageData && imageData.inlineData) {
         // Base64エンコードされた画像をData URLに変換
         const base64Image = imageData.inlineData.data;
         const mimeType = imageData.inlineData.mimeType || 'image/png';

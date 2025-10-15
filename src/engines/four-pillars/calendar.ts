@@ -1,4 +1,4 @@
-import { Stem, Branch, TEN_STEMS, TWELVE_BRANCHES } from './constants';
+import { Stem, Branch, TEN_STEMS, TWELVE_BRANCHES as _TWELVE_BRANCHES } from './constants';
 
 export interface Pillar {
   stem: Stem;

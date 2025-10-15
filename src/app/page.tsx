@@ -15,6 +15,7 @@ export default function HomePage() {
     geminiApiKey: '',
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -241,7 +242,7 @@ export default function HomePage() {
                       <div className="flex gap-2 flex-wrap">
                         {Object.entries(result.fourPillarsAppraisal.fiveElements).map(([element, count]) => (
                           <span key={element} className="bg-orange-600 text-white px-3 py-1 rounded-full text-sm">
-                            {element}: {count}
+                            {element}: {String(count)}
                           </span>
                         ))}
                       </div>
@@ -369,7 +370,7 @@ export default function HomePage() {
                         <div>
                           <p className="text-sm font-semibold text-purple-800 mb-1">アクセントカラー:</p>
                           <div className="flex gap-3">
-                            {result.worldViewConcept.colorPalette.accent.map((color: any, index: number) => (
+                            {result.worldViewConcept.colorPalette.accent.map((color: { name: string; hex: string; usage: string }, index: number) => (
                               <div key={index} className="flex items-center gap-2">
                                 <div
                                   className="w-16 h-16 rounded-lg shadow-md"
@@ -387,7 +388,7 @@ export default function HomePage() {
                         <div>
                           <p className="text-sm font-semibold text-purple-800 mb-1">ベースカラー:</p>
                           <div className="flex gap-3">
-                            {result.worldViewConcept.colorPalette.base.map((color: any, index: number) => (
+                            {result.worldViewConcept.colorPalette.base.map((color: { name: string; hex: string; usage: string }, index: number) => (
                               <div key={index} className="flex items-center gap-2">
                                 <div
                                   className="w-16 h-16 rounded-lg shadow-md"
