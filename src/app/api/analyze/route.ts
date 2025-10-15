@@ -1,7 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { FourPillarsEngine } from '@/engines/four-pillars';
+import { FourPillarsEngine, TEN_STEMS, TWELVE_BRANCHES, Pillar } from '@/engines/four-pillars';
 import { WorldViewGenerator } from '@/generators/world-view';
 import { GeminiClient } from '@/lib/gemini-client';
+
+// Helper function to convert Pillar to extended format for Gemini API
+function extendPillar(pillar: Pillar) {
+  const stemInfo = TEN_STEMS[pillar.stem];
+  const branchInfo = TWELVE_BRANCHES[pillar.branch];
+
+  return {
+    stem: pillar.stem,
+    branch: pillar.branch,
+    element: stemInfo.element,
+    yinYang: stemInfo.yin_yang,
+  };
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -53,7 +66,12 @@ export async function POST(request: NextRequest) {
           genre,
           targetAge,
           targetGender,
-          fourPillars: appraisal.pillars,
+          fourPillars: {
+            year: extendPillar(appraisal.pillars.year),
+            month: extendPillar(appraisal.pillars.month),
+            day: extendPillar(appraisal.pillars.day),
+            hour: extendPillar(appraisal.pillars.hour),
+          },
           fiveElements: appraisal.fiveElements,
           personality: appraisal.personality,
         });
