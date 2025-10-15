@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Creator {
+  id              String      @id @default(uuid())
+  name            String
+  birthDate       DateTime
+  birthTime       DateTime?
+  gender          String
+  nationality     String
+  channelUrl      String?
+  genre           String
+  subGenres       Json?
+  targetAge       String
+  targetGender    String
+  subscribers     Int?
+  uploadFrequency String?
+  appraisals      Appraisal[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@map("creators")
+}
+
+model Appraisal {
+  id               String             @id @default(uuid())
+  creatorId        String
+  creator          Creator            @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  fourPillars      Json
+  sanmei           Json
+  personality      Json
+  colorAffinity    Json
+  worldViewConcept WorldViewConcept?
+  createdAt        DateTime           @default(now())
+
+  @@map("appraisals")
+}
+
+model WorldViewConcept {
+  id              String           @id @default(uuid())
+  appraisalId     String           @unique
+  appraisal       Appraisal        @relation(fields: [appraisalId], references: [id], onDelete: Cascade)
+  theme           String
+  description     String?
+  colorPalette    Json
+  toneAndManner   Json
+  recommendations Json
+  images          GeneratedImage[]
+  reports         Report[]
+  createdAt       DateTime         @default(now())
+
+  @@map("world_view_concepts")
+}
+
+model GeneratedImage {
+  id                 String           @id @default(uuid())
+  worldViewConceptId String
+  worldViewConcept   WorldViewConcept @relation(fields: [worldViewConceptId], references: [id], onDelete: Cascade)
+  imageType          String
+  imageUrl           String
+  prompt             String?
+  createdAt          DateTime         @default(now())
+
+  @@map("generated_images")
+}
+
+model Report {
+  id                 String           @id @default(uuid())
+  worldViewConceptId String
+  worldViewConcept   WorldViewConcept @relation(fields: [worldViewConceptId], references: [id], onDelete: Cascade)
+  htmlContent        String?
+  pdfUrl             String?
+  createdAt          DateTime         @default(now())
+
+  @@map("reports")
+}
