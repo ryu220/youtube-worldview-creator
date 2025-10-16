@@ -38,22 +38,25 @@ export interface WorldViewConcept {
  */
 export class WorldViewGenerator {
   /**
-   * 四柱推命分析結果とジャンルから世界観コンセプトを生成
+   * 四柱推命分析結果とSEOキーワードから世界観コンセプトを生成
    */
   generate(input: {
     appraisal: FourPillarsAnalysisResult;
-    genre: string;
-    targetAge: string;
-    targetGender: string;
+    seoKeyword: string;
+    performerAge: number;
+    gender: string;
   }): WorldViewConcept {
-    const { appraisal, genre, targetAge, targetGender } = input;
+    const { appraisal, seoKeyword, performerAge, gender } = input;
     const dominantElement = appraisal.fiveElements.dominant;
 
+    // 演者の年齢から最適な視聴者層を算出（±10歳理論）
+    const targetAgeRange = `${performerAge - 10}〜${performerAge + 10}歳`;
+
     // テーマ生成
-    const theme = this.generateTheme(dominantElement, genre);
+    const theme = this.generateTheme(dominantElement, seoKeyword);
 
     // 説明文生成
-    const description = this.generateDescription(appraisal, genre, targetAge);
+    const description = this.generateDescription(appraisal, seoKeyword, targetAgeRange);
 
     // カラーパレット生成
     const colorPalette = this.generateDetailedColorPalette(
@@ -62,10 +65,10 @@ export class WorldViewGenerator {
     );
 
     // トーン&マナー生成
-    const toneAndManner = this.generateToneAndManner(dominantElement, genre, targetAge);
+    const toneAndManner = this.generateToneAndManner(dominantElement, seoKeyword, performerAge);
 
     // 推奨事項生成
-    const recommendations = this.generateRecommendations(dominantElement, genre, targetGender);
+    const recommendations = this.generateRecommendations(dominantElement, seoKeyword, gender);
 
     return {
       theme,
@@ -97,8 +100,8 @@ export class WorldViewGenerator {
    */
   private generateDescription(
     appraisal: FourPillarsAnalysisResult,
-    genre: string,
-    targetAge: string
+    seoKeyword: string,
+    targetAgeRange: string
   ): string {
     const traits = appraisal.personality.traits.slice(0, 3).join('」「');
     const element = appraisal.fiveElements.dominant;
@@ -111,7 +114,7 @@ export class WorldViewGenerator {
       水: 'あなたの本質的な「知性」「柔軟性」を活かし、視聴者に深い共感を呼ぶ世界観です。',
     };
 
-    return `${elementDescriptions[element]} ${targetAge}の視聴者の共感を呼び、長期的なファンを獲得できるコンセプトです。`;
+    return `${elementDescriptions[element]} 「${seoKeyword}」に関心のある${targetAgeRange}の視聴者の共感を呼び、長期的なファンを獲得できるコンセプトです。`;
   }
 
   /**
@@ -173,8 +176,8 @@ export class WorldViewGenerator {
    */
   private generateToneAndManner(
     element: Element,
-    _genre: string,
-    _targetAge: string
+    _seoKeyword: string,
+    _performerAge: number
   ): WorldViewConcept['toneAndManner'] {
     const elementStyles: Record<Element, { visualStyle: string; mood: string; typography: string }> = {
       木: {
@@ -212,8 +215,8 @@ export class WorldViewGenerator {
    */
   private generateRecommendations(
     element: Element,
-    _genre: string,
-    _targetGender: string
+    _seoKeyword: string,
+    _gender: string
   ): WorldViewConcept['recommendations'] {
     const elementRecommendations: Record<Element, WorldViewConcept['recommendations']> = {
       木: {

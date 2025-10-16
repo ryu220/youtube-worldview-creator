@@ -21,15 +21,15 @@ export interface ImageGenerationResponse {
   timestamp: string;
 }
 
+import type { PersonaAnalysisResult } from '@/analyzers/persona';
+import type { PositioningAnalysisResult } from '@/analyzers/positioning';
+
 export interface GeminiAppraisalRequest {
   name: string;
   birthDate: string;
-  birthTime?: string;
   gender: string;
-  nationality: string;
-  genre: string;
-  targetAge: string;
-  targetGender: string;
+  seoKeyword: string;
+  performerAge: number;
   fourPillars: {
     year: { stem: string; branch: string; element: string; yinYang: string };
     month: { stem: string; branch: string; element: string; yinYang: string };
@@ -48,6 +48,8 @@ export interface GeminiAppraisalRequest {
   personality: {
     traits: string[];
   };
+  personaAnalysis?: PersonaAnalysisResult;
+  positioningAnalysis?: PositioningAnalysisResult;
 }
 
 export interface GeminiAppraisalResponse {
@@ -90,10 +92,42 @@ export class GeminiClient {
 # ${request.name}さんについて
 - お名前: ${request.name}
 - 生年月日: ${request.birthDate}
-- 出生時刻: ${request.birthTime || '不明（正午として計算）'}
+- 年齢: ${request.performerAge}歳
 - 性別: ${request.gender}
-- YouTubeのジャンル: ${request.genre}
-- ターゲット視聴者: ${request.targetAge}の${request.targetGender}
+- SEOキーワード（狙っているジャンル）: ${request.seoKeyword}
+- 最適な視聴者層: ${request.performerAge - 10}〜${request.performerAge + 10}歳（演者の年齢±10歳が最も共感を得やすい層です）
+
+${request.personaAnalysis ? `
+# 「${request.seoKeyword}」に関心のある視聴者層の特徴
+- 想定年齢層: ${request.personaAnalysis.primaryAudience.ageRange}
+- 性別比率: ${request.personaAnalysis.primaryAudience.gender}
+- 興味関心: ${request.personaAnalysis.primaryAudience.interests.join('、')}
+- 悩み・課題: ${request.personaAnalysis.primaryAudience.painPoints.join('、')}
+- 視聴目的: ${request.personaAnalysis.primaryAudience.goals.join('、')}
+- 好む動画スタイル: ${request.personaAnalysis.contentPreferences.videoStyle}
+- 競合レベル: ${request.personaAnalysis.competitionLevel === 'high' ? '激戦区' : request.personaAnalysis.competitionLevel === 'medium' ? '中程度' : '比較的穴場'}
+` : ''}
+
+${request.positioningAnalysis ? `
+# あなたの独自ポジショニング戦略
+- 独自性スコア: ${request.positioningAnalysis.uniquenessScore}/100点（高いほど差別化された独自のポジション）
+- ポジショニングタイプ: ${
+  request.positioningAnalysis.positioningType === 'mainstream' ? '王道スタイル - 共感と親近感で勝負' :
+  request.positioningAnalysis.positioningType === 'differentiated' ? '差別化スタイル - 独自の視点と経験で勝負' :
+  request.positioningAnalysis.positioningType === 'niche' ? 'ニッチスタイル - 希少性と専門性で勝負' :
+  '革命的スタイル - 常識を覆す新カテゴリー創出'
+}
+- あなたの自然体な視聴者層: ${request.positioningAnalysis.performerOptimalRange}
+- ジャンルの典型的視聴者層: ${request.positioningAnalysis.personaTargetRange}
+
+## あなたの強みとチャンス
+${request.positioningAnalysis.opportunities.map(o => `${o}`).join('\n')}
+
+## 戦略的アプローチ
+- ${request.positioningAnalysis.positioningStrategy.approach}
+- 強みポイント: ${request.positioningAnalysis.positioningStrategy.strengthPoints.join('、')}
+- 差別化ポイント: ${request.positioningAnalysis.positioningStrategy.differentiators.join('、')}
+` : ''}
 
 # 生まれ持った5つの性質（エネルギー）
 - 木のエネルギー（成長する力・新しいアイデア）: ${request.fiveElements.wood.toFixed(1)}点
@@ -385,13 +419,13 @@ Style: Professional YouTube content creator portrait, trending on YouTube 2024, 
    */
   static generateThumbnailPrompt(input: {
     gender: string;
-    genre: string;
+    seoKeyword: string;
     theme: string;
     mainColor: string;
     accentColors: string[];
     typography: string;
   }): string {
-    const { gender, genre, theme, mainColor, accentColors, typography } = input;
+    const { gender, seoKeyword, theme, mainColor, accentColors, typography } = input;
 
     const genderMap: Record<string, string> = {
       男性: 'a young Japanese male YouTuber in his 20s-30s',
@@ -401,7 +435,7 @@ Style: Professional YouTube content creator portrait, trending on YouTube 2024, 
 
     const genderDesc = genderMap[gender] || 'a young Japanese YouTuber';
 
-    return `Create a professional, eye-catching YouTube thumbnail for a ${genre} video.
+    return `Create a professional, eye-catching YouTube thumbnail for a ${seoKeyword} video.
 
 SUBJECT:
 - ${genderDesc} as the main focal point
@@ -436,7 +470,7 @@ BACKGROUND:
 - Theme: ${theme}
 - Slightly blurred or simplified (subject stands out)
 - Complementary to main subject
-- Related to ${genre} genre
+- Related to ${seoKeyword} theme
 - Professional, clean aesthetic
 
 LIGHTING:
@@ -454,7 +488,7 @@ VISUAL EFFECTS:
 
 STYLE REFERENCES:
 - Trending YouTube thumbnails 2024
-- ${genre} genre best practices
+- ${seoKeyword} theme best practices
 - High click-through rate design
 - Professional content creator style
 - Photorealistic, high quality

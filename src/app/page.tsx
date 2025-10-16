@@ -6,12 +6,8 @@ export default function HomePage() {
   const [formData, setFormData] = useState({
     name: '',
     birthDate: '',
-    birthTime: '12:00',
     gender: '女性',
-    nationality: 'JP',
-    genre: 'VLOG',
-    targetAge: '20代',
-    targetGender: '女性',
+    seoKeyword: '',
     geminiApiKey: '',
   });
 
@@ -88,96 +84,47 @@ export default function HomePage() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">生年月日 *</label>
-                    <input
-                      type="date"
-                      name="birthDate"
-                      value={formData.birthDate}
-                      onChange={handleChange}
-                      className="input-field"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      出生時刻（不明の場合は12:00）
-                    </label>
-                    <input
-                      type="time"
-                      name="birthTime"
-                      value={formData.birthTime}
-                      onChange={handleChange}
-                      className="input-field"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">生年月日 *</label>
+                  <input
+                    type="date"
+                    name="birthDate"
+                    value={formData.birthDate}
+                    onChange={handleChange}
+                    className="input-field"
+                    required
+                  />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">性別 *</label>
-                    <select
-                      name="gender"
-                      value={formData.gender}
-                      onChange={handleChange}
-                      className="input-field"
-                      required
-                    >
-                      <option value="女性">女性</option>
-                      <option value="男性">男性</option>
-                      <option value="その他">その他</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">参入ジャンル *</label>
-                    <select
-                      name="genre"
-                      value={formData.genre}
-                      onChange={handleChange}
-                      className="input-field"
-                      required
-                    >
-                      <option value="VLOG">VLOG・日常</option>
-                      <option value="ゲーム実況">ゲーム実況</option>
-                      <option value="美容・コスメ">美容・コスメ</option>
-                      <option value="料理・グルメ">料理・グルメ</option>
-                      <option value="教育・学習">教育・学習</option>
-                      <option value="エンタメ">エンタメ</option>
-                    </select>
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">性別 *</label>
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    className="input-field"
+                    required
+                  >
+                    <option value="女性">女性</option>
+                    <option value="男性">男性</option>
+                    <option value="その他">その他</option>
+                  </select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">ターゲット年齢層 *</label>
-                    <select
-                      name="targetAge"
-                      value={formData.targetAge}
-                      onChange={handleChange}
-                      className="input-field"
-                      required
-                    >
-                      <option value="10代">10代</option>
-                      <option value="20代">20代</option>
-                      <option value="30代">30代</option>
-                      <option value="40代以上">40代以上</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">ターゲット性別 *</label>
-                    <select
-                      name="targetGender"
-                      value={formData.targetGender}
-                      onChange={handleChange}
-                      className="input-field"
-                      required
-                    >
-                      <option value="女性">女性</option>
-                      <option value="男性">男性</option>
-                      <option value="全て">全て</option>
-                    </select>
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">SEOキーワード（参入ジャンル） *</label>
+                  <input
+                    type="text"
+                    name="seoKeyword"
+                    value={formData.seoKeyword}
+                    onChange={handleChange}
+                    className="input-field"
+                    placeholder="例: VLOG、美容・コスメ、料理・グルメ"
+                    required
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    狙っているSEOキーワードを入力してください。ツールがキーワードの裏にいるペルソナを分析し、最適な世界観を提案します。
+                  </p>
                 </div>
 
                 <div>
@@ -328,6 +275,210 @@ export default function HomePage() {
                           </div>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* ペルソナ分析結果 */}
+              {result.personaAnalysis && (
+                <div className="card bg-gradient-to-br from-green-50 to-teal-50 border-2 border-green-200">
+                  <div className="flex items-center gap-2 mb-4">
+                    <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <h2 className="text-2xl font-bold text-green-900">「{result.personaAnalysis.keyword}」の視聴者層分析</h2>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="bg-white/80 rounded-lg p-4">
+                      <h3 className="font-bold text-lg text-green-900 mb-3">想定される視聴者</h3>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm font-semibold text-green-800">年齢層:</p>
+                          <p className="text-gray-800">{result.personaAnalysis.primaryAudience.ageRange}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-green-800">性別比率:</p>
+                          <p className="text-gray-800">{result.personaAnalysis.primaryAudience.gender}</p>
+                        </div>
+                      </div>
+                      <div className="mt-3">
+                        <p className="text-sm font-semibold text-green-800 mb-2">興味関心:</p>
+                        <div className="flex flex-wrap gap-2">
+                          {result.personaAnalysis.primaryAudience.interests.map((interest: string, index: number) => (
+                            <span key={index} className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                              {interest}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-white/80 rounded-lg p-4">
+                      <h3 className="font-bold text-lg text-green-900 mb-2">視聴者の悩み・視聴目的</h3>
+                      <div className="space-y-3">
+                        <div>
+                          <p className="text-sm font-semibold text-green-800">抱えている課題:</p>
+                          <ul className="list-disc list-inside text-gray-800 text-sm mt-1">
+                            {result.personaAnalysis.primaryAudience.painPoints.map((point: string, index: number) => (
+                              <li key={index}>{point}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-green-800">視聴目的:</p>
+                          <ul className="list-disc list-inside text-gray-800 text-sm mt-1">
+                            {result.personaAnalysis.primaryAudience.goals.map((goal: string, index: number) => (
+                              <li key={index}>{goal}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-white/80 rounded-lg p-4">
+                      <h3 className="font-bold text-lg text-green-900 mb-2">好まれるコンテンツ</h3>
+                      <div className="space-y-2">
+                        <div>
+                          <p className="text-sm font-semibold text-green-800">動画スタイル:</p>
+                          <p className="text-gray-800">{result.personaAnalysis.contentPreferences.videoStyle}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-green-800">動画の長さ:</p>
+                          <p className="text-gray-800">{result.personaAnalysis.contentPreferences.videoLength}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-green-800">トーン:</p>
+                          <p className="text-gray-800">{result.personaAnalysis.contentPreferences.toneOfVoice}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-green-100 rounded-lg p-4">
+                      <p className="text-sm font-semibold text-green-800 mb-1">💡 推奨アプローチ:</p>
+                      <p className="text-gray-800 text-sm">{result.personaAnalysis.recommendedApproach}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 独自ポジショニング戦略 */}
+              {result.positioningAnalysis && (
+                <div className={`card border-2 ${
+                  result.positioningAnalysis.positioningType === 'mainstream' ? 'bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-300' :
+                  result.positioningAnalysis.positioningType === 'differentiated' ? 'bg-gradient-to-br from-emerald-50 to-green-50 border-emerald-300' :
+                  result.positioningAnalysis.positioningType === 'niche' ? 'bg-gradient-to-br from-amber-50 to-orange-50 border-amber-300' :
+                  'bg-gradient-to-br from-purple-50 to-fuchsia-50 border-purple-300'
+                }`}>
+                  <div className="flex items-center gap-2 mb-4">
+                    <svg className={`w-6 h-6 ${
+                      result.positioningAnalysis.positioningType === 'mainstream' ? 'text-blue-600' :
+                      result.positioningAnalysis.positioningType === 'differentiated' ? 'text-emerald-600' :
+                      result.positioningAnalysis.positioningType === 'niche' ? 'text-amber-600' :
+                      'text-purple-600'
+                    }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                    <h2 className={`text-2xl font-bold ${
+                      result.positioningAnalysis.positioningType === 'mainstream' ? 'text-blue-900' :
+                      result.positioningAnalysis.positioningType === 'differentiated' ? 'text-emerald-900' :
+                      result.positioningAnalysis.positioningType === 'niche' ? 'text-amber-900' :
+                      'text-purple-900'
+                    }`}>あなたの独自ポジショニング戦略</h2>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="bg-white/80 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-bold text-lg text-gray-900">独自性スコア</h3>
+                        <div className="text-right">
+                          <p className={`text-4xl font-bold ${
+                            result.positioningAnalysis.positioningType === 'mainstream' ? 'text-blue-600' :
+                            result.positioningAnalysis.positioningType === 'differentiated' ? 'text-emerald-600' :
+                            result.positioningAnalysis.positioningType === 'niche' ? 'text-amber-600' :
+                            'text-purple-600'
+                          }`}>{result.positioningAnalysis.uniquenessScore}<span className="text-2xl">/100</span></p>
+                          <p className={`text-sm font-semibold ${
+                            result.positioningAnalysis.positioningType === 'mainstream' ? 'text-blue-700' :
+                            result.positioningAnalysis.positioningType === 'differentiated' ? 'text-emerald-700' :
+                            result.positioningAnalysis.positioningType === 'niche' ? 'text-amber-700' :
+                            'text-purple-700'
+                          }`}>
+                            {result.positioningAnalysis.positioningType === 'mainstream' ? '👑 王道スタイル' :
+                             result.positioningAnalysis.positioningType === 'differentiated' ? '✨ 差別化スタイル' :
+                             result.positioningAnalysis.positioningType === 'niche' ? '💎 ニッチスタイル' :
+                             '🚀 革命的スタイル'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="font-semibold text-gray-700">あなたの自然体な視聴者層:</span>
+                          <span className="text-gray-800">{result.positioningAnalysis.performerOptimalRange}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="font-semibold text-gray-700">ジャンルの典型的視聴者層:</span>
+                          <span className="text-gray-800">{result.positioningAnalysis.personaTargetRange}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-white/80 rounded-lg p-4">
+                      <h3 className="font-bold text-lg text-gray-900 mb-2">🎯 戦略的アプローチ</h3>
+                      <p className="text-purple-700 font-semibold mb-3">{result.positioningAnalysis.positioningStrategy.approach}</p>
+
+                      <div className="space-y-3">
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800 mb-1">💪 あなたの強みポイント:</p>
+                          <ul className="space-y-1">
+                            {result.positioningAnalysis.positioningStrategy.strengthPoints.map((point: string, index: number) => (
+                              <li key={index} className="flex gap-2">
+                                <span className="text-green-600">●</span>
+                                <span className="text-gray-800 text-sm">{point}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div>
+                          <p className="text-sm font-semibold text-gray-800 mb-1">⭐ 差別化ポイント:</p>
+                          <ul className="space-y-1">
+                            {result.positioningAnalysis.positioningStrategy.differentiators.map((diff: string, index: number) => (
+                              <li key={index} className="flex gap-2">
+                                <span className="text-amber-600">★</span>
+                                <span className="text-gray-800 text-sm">{diff}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    {result.positioningAnalysis.opportunities.length > 0 && (
+                      <div className="bg-gradient-to-r from-yellow-100 to-amber-100 border border-yellow-300 rounded-lg p-4">
+                        <p className="font-semibold text-amber-800 mb-2">✨ チャンス & 可能性</p>
+                        <ul className="space-y-2">
+                          {result.positioningAnalysis.opportunities.map((opportunity: string, index: number) => (
+                            <li key={index} className="text-amber-900 text-sm">
+                              {opportunity}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    <div className="bg-white/80 rounded-lg p-4">
+                      <h3 className="font-bold text-lg text-gray-900 mb-2">📌 具体的な推奨事項</h3>
+                      <ul className="space-y-2">
+                        {result.positioningAnalysis.recommendations.map((recommendation: string, index: number) => (
+                          <li key={index} className="flex gap-2">
+                            <span className="text-purple-600 flex-shrink-0">✓</span>
+                            <span className="text-gray-800 text-sm">{recommendation}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
                 </div>
